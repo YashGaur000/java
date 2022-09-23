@@ -1,3 +1,70 @@
-class banktransaction{
-  private 
+import java.lang.Thread;
+class Account{
+	private int balance;
+	public int accountno;
+	public void displayaccount(){
+		System.out.println("Account no "+accountno+" balance "+balance);
+	}
+	synchronized void deposit(int amount){
+		balance+=amount;
+		System.out.println(amount+" is deposited ");
+		displayaccount();
+	}
+	synchronized void withdraw(int amount){
+	balance-=amount;
+	System.out.println(amount+" is withdrawn");
+	displayaccount();
+	}
 }
+class transaction_deposit implements Runnable{
+	Account accountX;
+	transaction_deposit(Account x, int amount){
+		accountX=x;
+		this.amount=amount;
+		new Thread (this).start();
+	}
+	public void run(){
+		accountX.deposit(amount);
+	}
+}
+class transaction_withdraw implements Runnable{
+	Account accountY;
+	transaction_withdraw(Account y, int amount){
+		accountY=y;
+		this.amount=amount;
+		new Thread (this).start();
+	}
+	public void run(){
+	accountY.withdraw(amount);
+	}
+}
+class banktransaction{
+	public static void main(String args[]){
+		Account ABC=new Account();
+		ABC.balance=1000;
+		transaction_deposit t1=new transaction_deposit(ABC, 500);
+		transaction_withdraw t1=new transaction_withdraw(ABC, 500);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
